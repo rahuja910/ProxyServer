@@ -1,8 +1,12 @@
 var http      = require('http');
 var httpProxy = require('http-proxy');
 var request = require('request');
-var redis = require('redis')
-var client = redis.createClient(6379, '159.203.184.209', {})
+var redis = require('redis');
+var fs = require('fs');
+var redisServer = fs.readFileSync("/etc/keys/redis.json");
+var redisDetails = JSON.parse(redisServer);
+
+var client = redis.createClient(parseInt(redisDetails.redisPort), redisDetails.redisIp, {})
 
 var proxy = httpProxy.createProxyServer({});
 
