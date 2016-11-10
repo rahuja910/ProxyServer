@@ -12,6 +12,17 @@ var proxy = httpProxy.createProxyServer({});
 
 var server = http.createServer(function(req, res) {
 
+	client.exists('scalecount', function(err, reply) {
+	    if (reply === 1) {
+	    	client.get("scalecount", function(err, reply) {
+    			client.set("scalecount", reply+1);
+			});
+	    } else {
+	        client.set("scalecount", 1);
+	        client.expire("scalecount",30)
+	    }
+	});
+
 	client.rpoplpush('servers', 'servers', function(err, value) {
 
 		console.log('Proxy redirected to '+ value);
