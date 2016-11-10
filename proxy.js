@@ -15,7 +15,9 @@ var server = http.createServer(function(req, res) {
 	client.exists('scalecount', function(err, reply) {
 	    if (reply === 1) {
 	    	client.get("scalecount", function(err, reply) {
-    			client.set("scalecount", reply+1);
+	    		var scaleCount = parseInt(reply) + 1;
+    			client.set("scalecount", scaleCount);
+    			console.log(reply+'');
 			});
 	    } else {
 	        client.set("scalecount", 1);
