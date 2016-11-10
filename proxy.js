@@ -14,14 +14,12 @@ var server = http.createServer(function(req, res) {
 
 	client.exists('scalecount', function(err, reply) {
 	    if (reply === 1) {
-	    	client.get("scalecount", function(err, reply) {
-	    		var scaleCount = parseInt(reply) + 1;
-    			client.set("scalecount", scaleCount);
+	    	client.incr("scalecount", function(err, reply) {
     			console.log(reply+'');
 			});
 	    } else {
 	        client.set("scalecount", 1);
-	        client.expire("scalecount",30)
+	        client.expire("scalecount", 30);
 	    }
 	});
 
