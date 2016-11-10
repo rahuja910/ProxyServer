@@ -19,7 +19,7 @@ var server = http.createServer(function(req, res) {
 			});
 	    } else {
 	        client.set("scalecount", 1);
-	        client.expire("scalecount", 30);
+	        client.expire("scalecount", 900);
 	    }
 	});
 
