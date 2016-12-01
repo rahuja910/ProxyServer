@@ -5,6 +5,7 @@ var redis = require('redis');
 var fs = require('fs');
 var redisServer = fs.readFileSync("/etc/keys/redis.json");
 var redisDetails = JSON.parse(redisServer);
+var getIP = require('external-ip')();
 
 var client = redis.createClient(parseInt(redisDetails.redisPort), redisDetails.redisIp, {})
 
@@ -32,4 +33,15 @@ var server = http.createServer(function(req, res) {
 })
 
 console.log("Proxy listening on port 8081")
+
+getIP(function (err, ip) {
+	var host = server.address().address
+	var port = server.address().port
+	client.lrem("proxyservers",0,"http://"+ip+":"+port, function(err, reply) {
+		client.lpush("proxyservers","http://"+ip+":"+port, function(err, reply) {
+			console.log(reply);
+		});
+	});
+});
+
 server.listen(8081);
